@@ -1,3 +1,11 @@
+# Translation
+- 中文推理支持（Reasoning in Chinese）本次更新新增了推理结果中文翻译功能，帮助用户更直观地理解每位 AI 分析师或投资决策代理的逻辑。
+
+### 新功能说明：
+- 在启用 --show-reasoning 参数时，系统会显示英文推理，并自动附带中文翻译。
+- 所有 Agent（如 Portfolio Management Agent）均支持自动翻译其 reasoning 字段。
+- 使用 deep-translator 库，调用 Google 翻译 API 实时翻译，无需 API Key。
+
 # AI Hedge Fund
 
 This is a proof of concept for an AI-powered hedge fund.  The goal of this project is to explore the use of AI to make trading decisions.  This project is for **educational** purposes only and is not intended for real trading or investment.
