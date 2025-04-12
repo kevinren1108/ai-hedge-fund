@@ -26,6 +26,7 @@ from dateutil.relativedelta import relativedelta
 from tabulate import tabulate
 from utils.visualize import save_graph_as_png
 import json
+from deep_translator import GoogleTranslator
 
 # Load environment variables from .env file
 load_dotenv()
@@ -47,7 +48,11 @@ def parse_hedge_fund_response(response):
         print(f"Unexpected error while parsing response: {e}\nResponse: {repr(response)}")
         return None
 
-
+def translate_to_chinese(text):
+    try:
+        return GoogleTranslator(source='auto', target='zh-CN').translate(text)
+    except Exception as e:
+        return f"[翻译失败] {text}"
 
 ##### Run the Hedge Fund #####
 def run_hedge_fund(
@@ -288,3 +293,14 @@ if __name__ == "__main__":
         model_provider=model_provider,
     )
     print_trading_output(result)
+
+    if args.show_reasoning and result.get("decisions"):
+        print("\n" + "=" * 30 + " 中文翻译 " + "=" * 30)
+        reasoning_json = result["decisions"]
+
+        # 通常 reasoning 在每个 ticker 下的 "reasoning" 字段里
+        for ticker, info in reasoning_json.items():
+            if isinstance(info, dict) and "reasoning" in info:
+                english = info["reasoning"]
+                chinese = translate_to_chinese(english)
+                print(f"\n【{ticker}】\n英文:\n{english}\n\n中文:\n{chinese}")
